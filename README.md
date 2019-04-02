@@ -2,7 +2,7 @@
 
 Protek 9760 HD IP Telnet connection class for remote control
 
-Remote Key Map
+Remote Key Map (BorisFirmware)
 ```
 +---------------+-------------------------------+---------------+
 |         Power |                               | M        Mute |
@@ -32,3 +32,5 @@ Remote Key Map
 | u         USB | |       Pause | Ins       Rec | Home     Live |
 +---------------+---------------+---------------+---------------+
 ```
+
+TelnetClient in Java + MyElectronApp
