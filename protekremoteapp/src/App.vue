@@ -6,7 +6,17 @@
         <span class="font-weight-light">Protek Remote App</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <span class="mr-2">Version: 0.1.0</span>
+      <span>
+        <v-switch
+          v-model="connected"
+          :label="connected? 'Verbindung online': 'Verbindung offline'"
+          color="success"
+          hide-details
+          @click="connect()"
+        ></v-switch>
+      </span>
+      <v-spacer></v-spacer>
+      <span class="mr-2">Version: 1.0.0</span>
     </v-toolbar>
 
     <v-content>
@@ -31,102 +41,47 @@
             </v-btn>
           </v-flex>
 
-          <v-flex mb-4>
+          <v-flex my-4>
             <h1 class="display-2 font-weight-bold mb-3">
-              Nicos Protek Remote App
+              Remote Control
             </h1>
-            <p class="subheading font-weight-regular">
-              Fernbedienungslayout
-            </p>
-              <v-btn @click.stop="sendCommand('1\r\n')">
-                1
-              </v-btn>
-              <v-btn @click.stop="sendCommand('2\r\n')">
-                2
-              </v-btn>
-              <v-btn @click.stop="sendCommand('3\r\n')">
-                3
-              </v-btn>
-              <v-btn @click.stop="sendCommand('4\r\n')">
-                4
-              </v-btn>
-              <v-btn @click.stop="sendCommand('5\r\n')">
-                5
-              </v-btn>
-              <v-btn @click.stop="sendCommand('6\r\n')">
-                6
-              </v-btn>
-              <v-btn @click.stop="sendCommand('7\r\n')">
-                7
-              </v-btn>
-              <v-btn @click.stop="sendCommand('8\r\n')">
-                8
-              </v-btn>
-              <v-btn @click.stop="sendCommand('9\r\n')">
-                9
-              </v-btn>
-              <v-btn @click.stop="sendCommand('0\r\n')">
-                0
-              </v-btn>
-              <v-btn @click.stop="sendCommand('x')">
-                Exit
-              </v-btn>
-              <v-btn @click.stop="sendCommand('C')">
-                Channel +
-              </v-btn>
-              <v-btn @click.stop="sendCommand('c')">
-                Channel -
-              </v-btn>
-              <v-btn @click.stop="sendCommand('u')">
-                USB
-              </v-btn>
-              <v-btn @click.stop="sendCommand('f')">
-                Favorite
-              </v-btn>
-              <v-btn @click.stop="sendCommand('+')">
-                Option
-              </v-btn>
-              <v-btn @click.stop="sendCommand('u+')">
-                Hidden Menü
-              </v-btn>
-              <v-btn @click.stop="sendCommand('[C')">
-                Right
-              </v-btn>
-              <v-btn @click.stop="sendCommand('[D')">
-                Left
-              </v-btn>
-              <v-btn @click.stop="sendCommand('[B')">
-                Down
-              </v-btn>
-              <v-btn @click.stop="sendCommand('[A')">
-                Top
-              </v-btn>
-
-              <v-btn @click.stop="sendCommand('\r\n')">
-                Enter
-              </v-btn>
-
           </v-flex>
-
+        </v-layout>
+      </v-container>
+      <v-container
+        grid-list-xl
+        text-xs-center
+      >
+        <v-layout
+          row
+          wrap
+        >
+          <template
+            v-for="item in this.keymap"
+          >
+            <v-flex
+              :key="item.id"
+              :class="item.layout"
+            >
+              <v-btn
+                @click.stop.prevent="sendCommand(item.cmd)"
+              >
+                {{item.title}}
+              </v-btn>
+            </v-flex>
+          </template>
           <v-flex
             mb-5
             xs12
           >
             <h2 class="headline font-weight-bold mb-3">Remote-Terminal</h2>
-
             <v-layout justify-center>
-              Add Terminal output here
-            </v-layout>
-          </v-flex>
-
-          <v-flex
-            xs12
-            mb-5
-          >
-            <h2 class="headline font-weight-bold mb-3">Sonstieges</h2>
-
-            <v-layout justify-center>
-
+              <v-textarea
+                v-model="terminalOutput"
+                name="output"
+                label="Terminal output"
+                box
+              ></v-textarea>
             </v-layout>
           </v-flex>
 
@@ -151,7 +106,58 @@ export default {
       connected: false,
       rootLevel: true,
       remoEmu: false,
-      showTastatur: false
+      showTastatur: false,
+      terminalOutput: '',
+      keymap: [
+        {id: 1, layout: 'xs3', title: 'Power', cmd: ''},
+        {id: 2, layout: 'xs3 offset-xs6', title: 'Mute', cmd: 'M'},
+        {id: 3, layout: 'xs3', title: 'V.Format', cmd: 'F9'},
+        {id: 4, layout: 'xs3', title: 'Sat', cmd: 'F10'},
+        {id: 5, layout: 'xs3', title: 'TV/STB', cmd: 'F11'},
+        {id: 6, layout: 'xs3', title: 'TV/Radio', cmd: 'F12'},
+        {id: 7, layout: 'xs4', title: '1', cmd: '1'},
+        {id: 8, layout: 'xs4', title: '2', cmd: '2'},
+        {id: 9, layout: 'xs4', title: '3', cmd: '3'},
+        {id: 10, layout: 'xs4', title: '4', cmd: '4'},
+        {id: 11, layout: 'xs4', title: '5', cmd: '5'},
+        {id: 12, layout: 'xs4', title: '6', cmd: '6'},
+        {id: 13, layout: 'xs4', title: '7', cmd: '7'},
+        {id: 14, layout: 'xs4', title: '8', cmd: '8'},
+        {id: 15, layout: 'xs4', title: '9', cmd: '9'},
+        {id: 16, layout: 'xs4', title: 'Prev', cmd: 'TAB'},
+        {id: 17, layout: 'xs4', title: '0', cmd: '0'},
+        {id: 18, layout: 'xs4', title: 'Favorite', cmd: 'f'},
+        {id: 19, layout: 'xs3', title: 'Volume +', cmd: 'V'},
+        {id: 20, layout: 'xs3', title: 'EPG', cmd: 'e'},
+        {id: 21, layout: 'xs3', title: 'Info', cmd: 'i'},
+        {id: 22, layout: 'xs3', title: 'Channel +', cmd: 'C'},
+        {id: 23, layout: 'xs3', title: 'Volume -', cmd: 'v'},
+        {id: 24, layout: 'xs6', title: 'Up', cmd: '[A'},
+        {id: 25, layout: 'xs3', title: 'Channel -', cmd: 'c'},
+        {id: 26, layout: 'xs3', title: 'Left', cmd: '[D'},
+        {id: 28, layout: 'xs6', title: 'Enter / OK', cmd: '\r\n'},
+        {id: 29, layout: 'xs3', title: 'Right', cmd: '[C'},
+        {id: 30, layout: 'xs3', title: 'Exit', cmd: 'x'},
+        {id: 31, layout: 'xs6', title: 'Down', cmd: '[B'},
+        {id: 32, layout: 'xs3', title: 'Menü', cmd: 'm'},
+        {id: 33, layout: 'xs3', title: 'Audio', cmd: 'a'},
+        {id: 34, layout: 'xs3', title: 'TeleText', cmd: 't'},
+        {id: 35, layout: 'xs3', title: 'Subtitle', cmd: 's'},
+        {id: 36, layout: 'xs3', title: 'Option', cmd: '+'},
+        {id: 37, layout: 'xs3', title: 'RED', cmd: 'F5'},
+        {id: 38, layout: 'xs3', title: 'GREEN', cmd: 'F6'},
+        {id: 39, layout: 'xs3', title: 'YELLOW', cmd: 'F7'},
+        {id: 40, layout: 'xs3', title: 'BLUE', cmd: 'F8'},
+        {id: 41, layout: 'xs3', title: 'Rewind', cmd: '<'},
+        {id: 42, layout: 'xs3', title: 'Play', cmd: ' '},
+        {id: 43, layout: 'xs3', title: 'Stop', cmd: 'End'},
+        {id: 44, layout: 'xs3', title: 'F.F', cmd: '>'},
+        {id: 45, layout: 'xs3', title: 'USB', cmd: 'u'},
+        {id: 46, layout: 'xs3', title: 'Pause', cmd: '|'},
+        {id: 47, layout: 'xs3', title: 'Record', cmd: 'Ins'},
+        {id: 48, layout: 'xs3', title: 'Live', cmd: 'Home'},
+        {id: 49, layout: 'xs3', title: 'Hidden Menü', cmd: 'u+'}
+      ]
     }
   },
   methods: {
@@ -162,36 +168,34 @@ export default {
 
         Client.on('connect', function () {
           $vm.connected = true;
-          console.log('connected success');
         });
         // Add a 'data' event handler for the client socket
         // data is what the server sent to this socket
         Client.on('data', this.receiveData);
 
-        Client.on('drain', function () {
-          console.log('drain -Buffer empty');
-        });
         // Add a 'close' event handler for the client socket
         Client.on('close', function(args) {
-          console.log('close');
           $vm.connected = false;
           $vm.rootLevel = true;
-          $vm.remoEmu= false,
-          $vm.showTastatur= false
+          $vm.remoEmu= false;
+          $vm.showTastatur= false;
+          $vm.terminalOutput = "";
         });
         // Add a 'close' event handler for the client socket
         Client.on('end', function(){
-          console.log('ende');
+          $vm.terminalOutput += 'End Event'
         });
 
         Client.on('error', function(error) {
-          console.log(error);
+          $vm.terminalOutput += error.toString()
         });
 
+      } else {
+        this.closeConnection();
       }
     },
     receiveData: async function (data) {
-      console.log('DATA: ' + data.toString());
+      this.terminalOutput = this.terminalOutput + data.toString();
       if (this.rootLevel) {
         if (await Client.write('remo\r\n')) {
           this.rootLevel = false;
@@ -199,14 +203,11 @@ export default {
       }
     },
     sendCommand: async function (cmd) {
-      // '\r\n' = Enter
       await Client.write(cmd);
     },
     closeConnection: function () {
       Client.end();
     }
-  },
-  mounted: async function () {
   }
 }
 </script>
