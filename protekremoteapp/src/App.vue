@@ -12,7 +12,7 @@
           :label="connected? 'Verbindung online': 'Verbindung offline'"
           color="success"
           hide-details
-          @click="connect()"
+          @click.stop="connect()"
         ></v-switch>
       </span>
       <v-spacer></v-spacer>
@@ -25,22 +25,6 @@
           text-xs-center
           wrap
         >
-          <v-flex xs12>
-            Verbunden? {{connected? 'Ja':'Nein'}}
-            <v-btn
-              v-show="!connected"
-              @click.stop.prevent="connect()"
-            >
-              Mit Reciver Verbinden
-            </v-btn>
-            <v-btn
-              v-show="connected"
-              @click.stop.prevent="closeConnection()"
-            >
-              Reciver-Verbindung beenden
-            </v-btn>
-          </v-flex>
-
           <v-flex my-4>
             <h1 class="display-2 font-weight-bold mb-3">
               Remote Control
@@ -111,10 +95,10 @@ export default {
       keymap: [
         {id: 1, layout: 'xs3', title: 'Power', cmd: ''},
         {id: 2, layout: 'xs3 offset-xs6', title: 'Mute', cmd: 'M'},
-        {id: 3, layout: 'xs3', title: 'V.Format', cmd: 'F9'},
-        {id: 4, layout: 'xs3', title: 'Sat', cmd: 'F10'},
-        {id: 5, layout: 'xs3', title: 'TV/STB', cmd: 'F11'},
-        {id: 6, layout: 'xs3', title: 'TV/Radio', cmd: 'F12'},
+        {id: 3, layout: 'xs3', title: 'V.Format', cmd: '\u001b[20'},
+        {id: 4, layout: 'xs3', title: 'Sat', cmd: '\u001b[21'},
+        {id: 5, layout: 'xs3', title: 'TV/STB', cmd: '\u001b[23'},
+        {id: 6, layout: 'xs3', title: 'TV/Radio', cmd: '\u001b[24'},
         {id: 7, layout: 'xs4', title: '1', cmd: '1'},
         {id: 8, layout: 'xs4', title: '2', cmd: '2'},
         {id: 9, layout: 'xs4', title: '3', cmd: '3'},
@@ -124,7 +108,7 @@ export default {
         {id: 13, layout: 'xs4', title: '7', cmd: '7'},
         {id: 14, layout: 'xs4', title: '8', cmd: '8'},
         {id: 15, layout: 'xs4', title: '9', cmd: '9'},
-        {id: 16, layout: 'xs4', title: 'Prev', cmd: 'TAB'},
+        {id: 16, layout: 'xs4', title: 'Prev', cmd: '\t'},
         {id: 17, layout: 'xs4', title: '0', cmd: '0'},
         {id: 18, layout: 'xs4', title: 'Favorite', cmd: 'f'},
         {id: 19, layout: 'xs3', title: 'Volume +', cmd: 'V'},
@@ -132,30 +116,30 @@ export default {
         {id: 21, layout: 'xs3', title: 'Info', cmd: 'i'},
         {id: 22, layout: 'xs3', title: 'Channel +', cmd: 'C'},
         {id: 23, layout: 'xs3', title: 'Volume -', cmd: 'v'},
-        {id: 24, layout: 'xs6', title: 'Up', cmd: '[A'},
+        {id: 24, layout: 'xs6', title: 'Up', cmd: '\u001b[A'},
         {id: 25, layout: 'xs3', title: 'Channel -', cmd: 'c'},
-        {id: 26, layout: 'xs3', title: 'Left', cmd: '[D'},
+        {id: 26, layout: 'xs3', title: 'Left', cmd: '\u001b[D'},
         {id: 28, layout: 'xs6', title: 'Enter / OK', cmd: '\r\n'},
-        {id: 29, layout: 'xs3', title: 'Right', cmd: '[C'},
+        {id: 29, layout: 'xs3', title: 'Right', cmd: '\u001b[C'},
         {id: 30, layout: 'xs3', title: 'Exit', cmd: 'x'},
-        {id: 31, layout: 'xs6', title: 'Down', cmd: '[B'},
+        {id: 31, layout: 'xs6', title: 'Down', cmd: '\u001b[B'},
         {id: 32, layout: 'xs3', title: 'Menü', cmd: 'm'},
         {id: 33, layout: 'xs3', title: 'Audio', cmd: 'a'},
         {id: 34, layout: 'xs3', title: 'TeleText', cmd: 't'},
         {id: 35, layout: 'xs3', title: 'Subtitle', cmd: 's'},
         {id: 36, layout: 'xs3', title: 'Option', cmd: '+'},
-        {id: 37, layout: 'xs3', title: 'RED', cmd: 'F5'},
-        {id: 38, layout: 'xs3', title: 'GREEN', cmd: 'F6'},
-        {id: 39, layout: 'xs3', title: 'YELLOW', cmd: 'F7'},
-        {id: 40, layout: 'xs3', title: 'BLUE', cmd: 'F8'},
+        {id: 37, layout: 'xs3', title: 'RED', cmd: '\u001b[15'},
+        {id: 38, layout: 'xs3', title: 'GREEN', cmd: '\u001b[17'},
+        {id: 39, layout: 'xs3', title: 'YELLOW', cmd: '\u001b[18'},
+        {id: 40, layout: 'xs3', title: 'BLUE', cmd: '\u001b[19'},
         {id: 41, layout: 'xs3', title: 'Rewind', cmd: '<'},
         {id: 42, layout: 'xs3', title: 'Play', cmd: ' '},
-        {id: 43, layout: 'xs3', title: 'Stop', cmd: 'End'},
+        {id: 43, layout: 'xs3', title: 'Stop', cmd: '\u001b[4~'},
         {id: 44, layout: 'xs3', title: 'F.F', cmd: '>'},
         {id: 45, layout: 'xs3', title: 'USB', cmd: 'u'},
         {id: 46, layout: 'xs3', title: 'Pause', cmd: '|'},
-        {id: 47, layout: 'xs3', title: 'Record', cmd: 'Ins'},
-        {id: 48, layout: 'xs3', title: 'Live', cmd: 'Home'},
+        {id: 47, layout: 'xs3', title: 'Record', cmd: '\u001b[2~'}, // insert
+        {id: 48, layout: 'xs3', title: 'Live', cmd: '\u001b[1~'}, //pos1 / home
         {id: 49, layout: 'xs3', title: 'Hidden Menü', cmd: 'u+'}
       ]
     }
@@ -174,7 +158,7 @@ export default {
         Client.on('data', this.receiveData);
 
         // Add a 'close' event handler for the client socket
-        Client.on('close', function(args) {
+        Client.on('close', function() {
           $vm.connected = false;
           $vm.rootLevel = true;
           $vm.remoEmu= false;
@@ -191,7 +175,7 @@ export default {
         });
 
       } else {
-        this.closeConnection();
+        $vm.closeConnection();
       }
     },
     receiveData: async function (data) {
@@ -206,7 +190,10 @@ export default {
       await Client.write(cmd);
     },
     closeConnection: function () {
-      Client.end();
+      if (this.connected && Client) {
+        Client.end();
+      }
+
     }
   }
 }
