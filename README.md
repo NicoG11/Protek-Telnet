@@ -1,3 +1,5 @@
+# Project is outdated and not for public use
+
 # Protek 9760 HD IP Remote Control Connection by Telnet
 
 Protek 9760 HD IP Telnet connection class for remote control
